@@ -50,4 +50,19 @@ const deleteTask=async (req,res)=>{
 
     }
 }
-module.exports={add,getTask, toggleTask,deleteTask};
+const updateTask=async (req,res)=>{
+    try{
+        const {title}=req.body;
+        const task=await Task.findById(req.params.id)
+        if(!task){
+            return res.status(404).json({message:"not found"})
+        }
+        task.title=title;
+        await task.save();
+        res.json({task})
+    }catch(err){
+          return res.status(500).json({message:err.message})
+
+    }
+}
+module.exports={add,getTask, toggleTask,deleteTask,updateTask};
