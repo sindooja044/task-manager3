@@ -59,7 +59,7 @@ const updateTask=async (req,res)=>{
         }
         task.title=title;
         await task.save();
-        res.json({task})
+        res.json(task)
     }catch(err){
           return res.status(500).json({message:err.message})
 
