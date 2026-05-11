@@ -10,7 +10,7 @@ const userRegister=async (req, res) => {
     if(useExist){
         return res.status(404).json({message:"email already exist"})
     }
-  const hashedPassword= await bcrypt.hash('password',1234)
+  const hashedPassword= await bcrypt.hash(password,10)
 
     const user=await User.create({name, email, password:hashedPassword});
    
@@ -20,4 +20,23 @@ const userRegister=async (req, res) => {
 }
 
 }
-module.exports ={userRegister}
+const userLogin=async (req,res)=>{
+    try{
+        const {email,password}=req.body;
+         const userExist=await User.findOne({email});
+        if(!userExist){
+        return res.status(404).json({message:"Invalid Credentials"})
+    }
+        const user = await bcrypt.compare(password,userExist.password)
+        if(!user){
+        return res.status(404).json({message:"Invalid Credentials"})
+    }
+    const token=await jwt.sign({id:user._id}, process.env.JWT_SECRET)
+     res.json({token,user});
+
+    }catch(err){
+        return res.status(500).json({message:err.message})
+
+    }  
+}
+module.exports ={userRegister,userLogin}
