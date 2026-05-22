@@ -2,6 +2,7 @@ const express=require('express');
 const mongoose= require('mongoose')
 const connectDB=require('./config/db');
 const taskRoutes=require('./routes/taskRoutes');
+const userRoutes = require("./routes/userRoutes");
 const cors=require('cors')
 
 const app= express();
@@ -17,3 +18,6 @@ app.listen(PORT, ()=>{
 
 })
 app.use("/api/tasks", taskRoutes)
+
+
+app.use("/api/users", userRoutes);
